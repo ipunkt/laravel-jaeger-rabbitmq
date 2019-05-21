@@ -140,7 +140,7 @@ class ReceiveEventHandler
         if( !$spanContextSet )
             return;
 
-        $this->spanContext[Reference::CHILD_OF] = $this->spanContext;
+        $this->spanOptions[Reference::CHILD_OF] = $this->spanContext;
     }
 
 
