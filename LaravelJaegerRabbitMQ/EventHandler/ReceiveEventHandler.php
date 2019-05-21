@@ -91,7 +91,7 @@ class ReceiveEventHandler
     private function extractContextFromJsonBody()
     {
         $body = $this->message->getBody();
-        $bodyContent = json_decode($body);
+        $bodyContent = json_decode($body, true);
 
         if( !array_key_exists('trace', $bodyContent) )
             return;
