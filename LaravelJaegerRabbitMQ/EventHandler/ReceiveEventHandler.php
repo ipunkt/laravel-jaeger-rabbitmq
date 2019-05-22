@@ -2,6 +2,7 @@
 
 use App;
 use Ipunkt\LaravelJaegerRabbitMQ\MessageContext\EmptyContext;
+use Ipunkt\LaravelJaegerRabbitMQ\MessageContext\MessageContext;
 use Ipunkt\RabbitMQ\Events\MessageProcessed;
 use Ipunkt\RabbitMQ\Events\MessageReceived;
 
@@ -14,7 +15,7 @@ class ReceiveEventHandler
 
     public function messageReceived(MessageReceived $messageReceived)
     {
-        $context = new \MessageContext();
+        $context = new MessageContext();
 
         App::instance('message.context', $context);
 
