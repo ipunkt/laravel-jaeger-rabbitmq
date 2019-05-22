@@ -3,7 +3,7 @@
 /**
  * Class EmptyContext
  */
-class EmptyContext
+class EmptyContext implements Context
 {
     public function finish()
     {

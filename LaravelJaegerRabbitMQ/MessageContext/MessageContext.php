@@ -13,7 +13,7 @@ use Ramsey\Uuid\UuidInterface;
 /**
  * Class MessageContext
  */
-class MessageContext
+class MessageContext implements Context
 {
 
     /**
