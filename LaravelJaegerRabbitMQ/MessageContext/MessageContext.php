@@ -1,6 +1,7 @@
 <?php namespace Ipunkt\LaravelJaegerRabbitMQ\MessageContext;
 
 use Interop\Amqp\AmqpMessage;
+use Ipunkt\LaravelJaegerRabbitMQ\TagPropagator\TagPropagator;
 use Jaeger\Config;
 use Jaeger\Jaeger;
 use OpenTracing\Reference;
@@ -37,14 +38,26 @@ class MessageContext implements Context
     protected $spanContext;
 
     /**
-     * @var array
-     */
-    protected $propagatedTags = [];
-
-    /**
      * @var UuidInterface
      */
     protected $uuid;
+
+    /**
+     * @var array
+     */
+    private $traceContent;
+    /**
+     * @var TagPropagator
+     */
+    private $tagPropagator;
+
+    /**
+     * MessageContext constructor.
+     * @param TagPropagator $tagPropagator
+     */
+    public function __construct(TagPropagator $tagPropagator) {
+        $this->tagPropagator = $tagPropagator;
+    }
 
     public function parseMessage(AmqpMessage $message)
     {
@@ -93,6 +106,7 @@ class MessageContext implements Context
             'uuid' => (string)$this->uuid,
             'environment' => config('app.env')
         ]);
+        $this->tagPropagator->apply($this->messageSpan);
     }
 
     private function extractContext()
@@ -107,6 +121,7 @@ class MessageContext implements Context
     private function resetContext()
     {
         $this->spanContext = null;
+        $this->tagPropagator->reset();
     }
 
     private function extractContextFromJsonBody()
@@ -117,8 +132,20 @@ class MessageContext implements Context
         if( !array_key_exists('trace', $bodyContent) )
             return;
 
-        $traceContent = $bodyContent['trace'];
-        $this->spanContext = $this->tracer->extract(TEXT_MAP, $traceContent);
+        $this->traceContent = $bodyContent['trace'];
+        $this->extractSpanContext();
+
+        $this->extractPropagatedTags();
+    }
+
+    private function extractSpanContext()
+    {
+        $this->spanContext = $this->tracer->extract(TEXT_MAP, $this->traceContent);
+    }
+
+    private function extractPropagatedTags()
+    {
+        $this->tagPropagator->extract($this->traceContent);
     }
 
     /**
@@ -142,14 +169,14 @@ class MessageContext implements Context
         $this->spanOptions[Reference::CHILD_OF] = $this->spanContext;
     }
 
-    public function setServiceTags(array $tags)
+    public function setPrivateTags(array $tags)
     {
         $this->messageSpan->setTags($tags);
     }
 
     public function setPropagatedTags(array $tags)
     {
-        $this->propagatedTags = array_merge($this->propagatedTags, $tags);
+        $this->tagPropagator->addTags($tags);
 
         $this->messageSpan->setTags($tags);
     }
@@ -162,5 +189,7 @@ class MessageContext implements Context
         $context = $this->messageSpan->getContext();
 
         app('context.tracer')->inject($context, TEXT_MAP, $messageData);
+
+        $this->tagPropagator->inject($messageData);
     }
 }

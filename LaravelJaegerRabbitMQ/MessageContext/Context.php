@@ -8,7 +8,7 @@ interface Context
 {
     function finish();
 
-    function setServiceTags(array $tags);
+    function setPrivateTags(array $tags);
 
     function setPropagatedTags(array $tags);
 

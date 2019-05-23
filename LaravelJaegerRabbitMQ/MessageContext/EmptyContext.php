@@ -10,7 +10,7 @@ class EmptyContext implements Context
 
     }
 
-    public function setServiceTags(array $tags)
+    public function setPrivateTags(array $tags)
     {
     }
 

@@ -15,7 +15,7 @@ class ReceiveEventHandler
 
     public function messageReceived(MessageReceived $messageReceived)
     {
-        $context = new MessageContext();
+        $context = app(MessageContext::class);
 
         App::instance('message.context', $context);
 

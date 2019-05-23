@@ -1,12 +1,9 @@
 <?php namespace Ipunkt\LaravelJaegerRabbitMQ\EventHandler;
 
 use Interop\Amqp\AmqpMessage;
-use Ipunkt\LaravelJaegerRabbitMQ\MessageContext\Exceptions\NoMessageSpanException;
-use Ipunkt\LaravelJaegerRabbitMQ\MessageContext\Exceptions\NoTracerException;
 use Ipunkt\LaravelJaegerRabbitMQ\MessageContext\MessageContext;
 use Ipunkt\RabbitMQ\Events\MessageSending;
 use Ipunkt\RabbitMQ\Events\MessageSent;
-use const OpenTracing\Formats\TEXT_MAP;
 
 /**
  * Class SendEventHandler
