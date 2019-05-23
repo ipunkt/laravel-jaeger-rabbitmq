@@ -30,10 +30,7 @@ class SendEventHandler
 
     private function addContextToMessage()
     {
-        if( str_contains($this->message->getContentType(), 'json' ) ) {
-            $this->addContextToJsonMessage();
-            return;
-        }
+        $this->addContextToJsonMessage();
     }
 
     /**
@@ -41,6 +38,9 @@ class SendEventHandler
      */
     private function addContextToJsonMessage()
     {
+        if( !str_contains($this->message->getContentType(), 'json' ) )
+            return;
+
         $messageBody = $this->message->getBody();
         $messageContent = json_decode($messageBody, true);
 
