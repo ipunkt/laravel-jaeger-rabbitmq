@@ -1,9 +1,9 @@
-<?php namespace Ipunkt\LaravelJaegerRabbitMQ\EventHandler;
+<?php namespace Ipunkt\src\EventHandler;
 
 use App;
 use Ipunkt\LaravelJaeger\Context\SpanContext;
-use Ipunkt\LaravelJaegerRabbitMQ\Context\EmptyMessageContext;
-use Ipunkt\LaravelJaegerRabbitMQ\Context\MessageParser;
+use Ipunkt\src\Context\EmptyMessageContext;
+use Ipunkt\src\Context\MessageParser;
 use Ipunkt\RabbitMQ\Events\MessageProcessed;
 use Ipunkt\RabbitMQ\Events\MessageReceived;
 

@@ -11,7 +11,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "Ipunkt\\LaravelJaegerRabbitMQ\\": "LaravelJaegerRabbitMQ/"
+      "Ipunkt\\LaravelJaegerRabbitMQ\\": "src/"
     }
   },
   "minimum-stability": "dev",

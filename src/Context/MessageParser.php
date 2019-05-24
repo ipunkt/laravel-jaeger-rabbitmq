@@ -1,4 +1,4 @@
-<?php namespace Ipunkt\LaravelJaegerRabbitMQ\Context;
+<?php namespace Ipunkt\src\Context;
 
 use Interop\Amqp\AmqpMessage;
 use Ipunkt\LaravelJaeger\Context\Context;
