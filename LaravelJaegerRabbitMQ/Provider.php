@@ -4,7 +4,7 @@ use DB;
 use Illuminate\Log\Events\MessageLogged;
 use Illuminate\Support\ServiceProvider;
 use Event;
-use Ipunkt\LaravelJaeger\Context\EmptyContext;
+use Ipunkt\LaravelJaegerRabbitMQ\Context\EmptyMessageContext;
 use Ipunkt\LaravelJaegerRabbitMQ\EventHandler\ReceiveEventHandler;
 use Ipunkt\LaravelJaegerRabbitMQ\EventHandler\SendEventHandler;
 use Ipunkt\RabbitMQ\Events\MessageProcessed;
@@ -21,7 +21,7 @@ class Provider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->instance('message.context', new EmptyContext());
+        $this->app->instance('message.context', new EmptyMessageContext());
     }
 
     public function boot()

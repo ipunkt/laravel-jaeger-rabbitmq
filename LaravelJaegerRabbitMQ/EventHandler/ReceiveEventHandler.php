@@ -1,8 +1,8 @@
 <?php namespace Ipunkt\LaravelJaegerRabbitMQ\EventHandler;
 
 use App;
-use Ipunkt\LaravelJaeger\Context\EmptyContext;
 use Ipunkt\LaravelJaeger\Context\SpanContext;
+use Ipunkt\LaravelJaegerRabbitMQ\Context\EmptyMessageContext;
 use Ipunkt\LaravelJaegerRabbitMQ\Context\MessageParser;
 use Ipunkt\RabbitMQ\Events\MessageProcessed;
 use Ipunkt\RabbitMQ\Events\MessageReceived;
@@ -49,7 +49,7 @@ class ReceiveEventHandler
         $context->setPrivateTags(['result' => $messageProcessed->getResult()]);
         $context->finish();
 
-        app()->instance('message.context', new EmptyContext());
+        app()->instance('message.context', new EmptyMessageContext());
     }
 
 	private function parseMessage( \Interop\Amqp\AmqpMessage $message ) {
