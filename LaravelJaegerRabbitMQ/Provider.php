@@ -4,9 +4,9 @@ use DB;
 use Illuminate\Log\Events\MessageLogged;
 use Illuminate\Support\ServiceProvider;
 use Event;
+use Ipunkt\LaravelJaeger\Context\EmptyContext;
 use Ipunkt\LaravelJaegerRabbitMQ\EventHandler\ReceiveEventHandler;
 use Ipunkt\LaravelJaegerRabbitMQ\EventHandler\SendEventHandler;
-use Ipunkt\LaravelJaegerRabbitMQ\MessageContext\EmptyContext;
 use Ipunkt\RabbitMQ\Events\MessageProcessed;
 use Ipunkt\RabbitMQ\Events\MessageReceived;
 use Ipunkt\RabbitMQ\Events\MessageSending;
@@ -47,17 +47,7 @@ class Provider extends ServiceProvider
 
         // Listen for each logged message and attach it to the global span
         Event::listen(MessageLogged::class, function (MessageLogged $e) {
-            app('context.tracer.globalSpan')->log((array)$e);
-        });
-
-        // Also listen for queries and log then,
-        // it also receives the log in the MessageLogged event above
-        DB::listen(function ($query, $values) {
-            Log::debug("[DB Query] {$query->connection->getName()}", [
-                'query' => str_replace('"', "'", $query->sql),
-                'values' => $values,
-                'time' => $query->time . 'ms',
-            ]);
+            app('message.context')->log((array)$e);
         });
     }
 }
