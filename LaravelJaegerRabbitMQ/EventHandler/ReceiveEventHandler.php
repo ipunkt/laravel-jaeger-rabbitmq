@@ -1,8 +1,9 @@
 <?php namespace Ipunkt\LaravelJaegerRabbitMQ\EventHandler;
 
 use App;
+use Ipunkt\LaravelJaeger\Context\EmptyContext;
 use Ipunkt\LaravelJaeger\Context\SpanContext;
-use Ipunkt\LaravelJaegerRabbitMQ\MessageContext\EmptyContext;
+use Ipunkt\LaravelJaegerRabbitMQ\Context\MessageParser;
 use Ipunkt\RabbitMQ\Events\MessageProcessed;
 use Ipunkt\RabbitMQ\Events\MessageReceived;
 
@@ -12,6 +13,18 @@ use Ipunkt\RabbitMQ\Events\MessageReceived;
  */
 class ReceiveEventHandler
 {
+    /**
+     * @var MessageParser
+     */
+    private $messageParser;
+
+    /**
+     * ReceiveEventHandler constructor.
+     * @param MessageParser $messageParser
+     */
+    public function __construct( MessageParser $messageParser ) {
+        $this->messageParser = $messageParser;
+    }
 
     public function messageReceived(MessageReceived $messageReceived)
     {
@@ -28,18 +41,22 @@ class ReceiveEventHandler
 
     public function messageProcessed(MessageProcessed $messageProcessed)
     {
-        app('message.context')->finish();
+        /**
+         * @var SpanContext $context
+         */
+        $context = app('message.context');
+        $context->log(['result' => $messageProcessed->getResult()]);
+        $context->setPrivateTags(['result' => $messageProcessed->getResult()]);
+        $context->finish();
 
         App::instance('message.context', new EmptyContext());
     }
 
 	private function parseMessage( \Interop\Amqp\AmqpMessage $message ) {
-    	$routingKey = $message->getRoutingKey();
-
-    	$contentJson = $message->getBody();
-    	$content = json_decode($contentJson, true);
-
-		app('message.context')->parse( $routingKey, $content);
+        $this->messageParser
+            ->setMessage($message)
+            ->setContext( app('message.context') )
+            ->parse();
 	}
 
 

@@ -19,7 +19,8 @@
     "php": "^7.1.3",
     "ipunkt/laravel-jaeger": "dev-master",
     "ipunkt/laravel-rabbitmq-enqueue": "dev-master",
-    "laravel/framework": "^5"
+    "laravel/framework": "^5",
+    "ext-json": "*"
   },
   "extra": {
     "laravel": {

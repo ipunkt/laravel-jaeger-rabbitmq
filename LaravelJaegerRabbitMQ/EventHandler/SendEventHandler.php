@@ -1,7 +1,7 @@
 <?php namespace Ipunkt\LaravelJaegerRabbitMQ\EventHandler;
 
 use Interop\Amqp\AmqpMessage;
-use Ipunkt\LaravelJaegerRabbitMQ\MessageContext\MessageContext;
+use Ipunkt\LaravelJaeger\Context\Context;
 use Ipunkt\RabbitMQ\Events\MessageSending;
 use Ipunkt\RabbitMQ\Events\MessageSent;
 
@@ -47,11 +47,11 @@ class SendEventHandler
         $traceContent = [];
 
         /**
-         * @var MessageContext $messageContext
+         * @var Context $context
          */
-        $messageContext = app('message.context');
+        $context = app('message.context');
 
-        $messageContext->inject($traceContent);
+        $context->inject($traceContent);
 
         $messageContent['trace'] = $traceContent;
         $this->message->setBody( json_encode($messageContent) );
