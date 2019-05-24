@@ -33,7 +33,7 @@ class ReceiveEventHandler
 	     */
         $context = app(SpanContext::class);
 
-        App::instance('message.context', $context);
+        app()->instance('message.context', $context);
 
         $context->start();
         $this->parseMessage( $messageReceived->getMessage() );
@@ -49,7 +49,7 @@ class ReceiveEventHandler
         $context->setPrivateTags(['result' => $messageProcessed->getResult()]);
         $context->finish();
 
-        App::instance('message.context', new EmptyContext());
+        app()->instance('message.context', new EmptyContext());
     }
 
 	private function parseMessage( \Interop\Amqp\AmqpMessage $message ) {
