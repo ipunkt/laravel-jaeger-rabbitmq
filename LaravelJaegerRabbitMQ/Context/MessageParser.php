@@ -37,6 +37,8 @@ class MessageParser
         $this->parseContent();
 
         $this->context->parse( $this->routingKey, $this->content);
+
+        $this->logMessageContent();
     }
 
     private function parseRoutingKey()
@@ -48,6 +50,15 @@ class MessageParser
     {
         $contentJson = $this->message->getBody();
         $this->content = json_decode($contentJson, true);
+    }
+
+    private function logMessageContent()
+    {
+        $this->context->log([
+            'routing-key' => $this->routingKey,
+            'content' => $this->message->getBody(),
+            'content-type' => $this->message->getContentType(),
+        ]);
     }
 
     /**
