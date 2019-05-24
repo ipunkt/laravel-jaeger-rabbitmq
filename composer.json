@@ -14,6 +14,11 @@
       "Ipunkt\\LaravelJaegerRabbitMQ\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Ipunkt\\LaravelJaegerRabbitMQTests\\": "tests/"
+    }
+  },
   "minimum-stability": "dev",
   "require": {
     "php": "^7.1.3",
@@ -28,5 +33,8 @@
             "Ipunkt\\LaravelJaegerRabbitMQ\\Provider"
         ]
     }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^8.2@dev"
   }
 }
