@@ -1,4 +1,4 @@
-<?php namespace Ipunkt\src\Context;
+<?php namespace Ipunkt\LaravelJaegerRabbitMQ\Context;
 
 use Ipunkt\LaravelJaeger\Context\Context;
 use Ipunkt\LaravelJaeger\Context\EmptyContext;

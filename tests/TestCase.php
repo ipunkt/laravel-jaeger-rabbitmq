@@ -4,6 +4,6 @@
  * Class TestCase
  * @package Ipunkt\LaravelJaegerRabbitMQTests
  */
-class TestCase extends \PHPUnit\Framework\TestCase {
+class TestCase extends \Orchestra\Testbench\TestCase {
 
 }

@@ -1,12 +1,12 @@
-<?php namespace Ipunkt\src;
+<?php namespace Ipunkt\LaravelJaegerRabbitMQ;
 
 use DB;
 use Illuminate\Log\Events\MessageLogged;
 use Illuminate\Support\ServiceProvider;
 use Event;
-use Ipunkt\src\Context\EmptyMessageContext;
-use Ipunkt\src\EventHandler\ReceiveEventHandler;
-use Ipunkt\src\EventHandler\SendEventHandler;
+use Ipunkt\LaravelJaegerRabbitMQ\Context\EmptyMessageContext;
+use Ipunkt\LaravelJaegerRabbitMQ\EventHandler\ReceiveEventHandler;
+use Ipunkt\LaravelJaegerRabbitMQ\EventHandler\SendEventHandler;
 use Ipunkt\RabbitMQ\Events\MessageProcessed;
 use Ipunkt\RabbitMQ\Events\MessageReceived;
 use Ipunkt\RabbitMQ\Events\MessageSending;

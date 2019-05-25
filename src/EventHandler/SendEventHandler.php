@@ -1,4 +1,4 @@
-<?php namespace Ipunkt\src\EventHandler;
+<?php namespace Ipunkt\LaravelJaegerRabbitMQ\EventHandler;
 
 use Interop\Amqp\AmqpMessage;
 use Ipunkt\LaravelJaeger\Context\Context;
