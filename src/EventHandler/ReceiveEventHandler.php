@@ -1,9 +1,11 @@
 <?php namespace Ipunkt\LaravelJaegerRabbitMQ\EventHandler;
 
 use App;
+use Interop\Amqp\AmqpMessage;
 use Ipunkt\LaravelJaeger\Context\SpanContext;
 use Ipunkt\LaravelJaegerRabbitMQ\Context\EmptyMessageContext;
 use Ipunkt\LaravelJaegerRabbitMQ\Context\MessageParser;
+use Ipunkt\RabbitMQ\Events\MessageCausedException;
 use Ipunkt\RabbitMQ\Events\MessageProcessed;
 use Ipunkt\RabbitMQ\Events\MessageReceived;
 
@@ -52,7 +54,31 @@ class ReceiveEventHandler
         app()->instance('message.context', new EmptyMessageContext());
     }
 
-	private function parseMessage( \Interop\Amqp\AmqpMessage $message ) {
+    public function messageCausedException(MessageCausedException $messageCausedException)
+    {
+        $exception = $messageCausedException->getThrowable();
+
+        /**
+         * @var SpanContext $context
+         */
+        $context = app('message.context');
+        $context->log([
+            'message' => 'Exception thrown',
+            'exception-message' => $exception->getMessage(),
+            'exception-type' => get_class($exception),
+            'exception-code' => $exception->getCode(),
+            'exception-file' => $exception->getFile(),
+            'exception-line' => $exception->getLine(),
+            'exception-trace' => $exception->getTraceAsString(),
+        ]);
+        $context->setPrivateTags(['error' => 'exception']);
+        $context->finish();
+
+        app()->instance('message.context', new EmptyMessageContext());
+
+    }
+
+	private function parseMessage( AmqpMessage $message ) {
         $this->messageParser
             ->setMessage($message)
             ->setContext( app('message.context') )

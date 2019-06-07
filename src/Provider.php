@@ -7,6 +7,7 @@ use Event;
 use Ipunkt\LaravelJaegerRabbitMQ\Context\EmptyMessageContext;
 use Ipunkt\LaravelJaegerRabbitMQ\EventHandler\ReceiveEventHandler;
 use Ipunkt\LaravelJaegerRabbitMQ\EventHandler\SendEventHandler;
+use Ipunkt\RabbitMQ\Events\MessageCausedException;
 use Ipunkt\RabbitMQ\Events\MessageProcessed;
 use Ipunkt\RabbitMQ\Events\MessageReceived;
 use Ipunkt\RabbitMQ\Events\MessageSending;
@@ -29,6 +30,8 @@ class Provider extends ServiceProvider
         Event::listen(MessageReceived::class, ReceiveEventHandler::class.'@messageReceived');
 
         Event::listen(MessageProcessed::class, ReceiveEventHandler::class.'@messageProcessed');
+
+        Event::listen(MessageCausedException::class, ReceiveEventHandler::class.'@messageCausedException');
 
         Event::listen(MessageSending::class, SendEventHandler::class.'@messageSending');
 
