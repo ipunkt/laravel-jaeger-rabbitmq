@@ -20,10 +20,11 @@
     }
   },
   "minimum-stability": "dev",
+  "prefer-stable": true,
   "require": {
     "php": "^7.1.3",
-    "ipunkt/laravel-jaeger": "dev-master",
-    "ipunkt/laravel-rabbitmq-enqueue": "dev-master",
+    "ipunkt/laravel-jaeger": "^1.0",
+    "ipunkt/laravel-rabbitmq-enqueue": "^1.0",
     "laravel/framework": "^5",
     "ext-json": "*"
   },
