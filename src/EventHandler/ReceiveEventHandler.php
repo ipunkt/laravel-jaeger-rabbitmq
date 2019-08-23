@@ -3,6 +3,7 @@
 use App;
 use Interop\Amqp\AmqpMessage;
 use Ipunkt\LaravelJaeger\Context\SpanContext;
+use Ipunkt\LaravelJaeger\Context\MasterSpanContext;
 use Ipunkt\LaravelJaegerRabbitMQ\Context\EmptyMessageContext;
 use Ipunkt\LaravelJaegerRabbitMQ\Context\MessageParser;
 use Ipunkt\RabbitMQ\Events\MessageCausedException;
@@ -31,11 +32,12 @@ class ReceiveEventHandler
     public function messageReceived(MessageReceived $messageReceived)
     {
 	    /**
-	     * @var SpanContext $context
+	     * @var MasterSpanContext $context
 	     */
-        $context = app(SpanContext::class);
+        $context = app(MasterSpanContext::class);
 
         app()->instance('message.context', $context);
+        app()->instance('current-context', $context);
 
         $context->start();
         $this->parseMessage( $messageReceived->getMessage() );
@@ -52,6 +54,7 @@ class ReceiveEventHandler
         $context->finish();
 
         app()->instance('message.context', new EmptyMessageContext());
+        app()->instance('current-context', new EmptyMessageContext());
     }
 
     public function messageCausedException(MessageCausedException $messageCausedException)
@@ -75,6 +78,7 @@ class ReceiveEventHandler
         $context->finish();
 
         app()->instance('message.context', new EmptyMessageContext());
+        app()->instance('current-context', new EmptyMessageContext());
 
     }
 

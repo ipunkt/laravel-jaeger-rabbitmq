@@ -36,21 +36,6 @@ class Provider extends ServiceProvider
         Event::listen(MessageSending::class, SendEventHandler::class.'@messageSending');
 
         Event::listen(MessageSent::class, SendEventHandler::class.'@messageSent');
-
-        $this->registerEvents();
     }
 
-    protected function registerEvents(): void
-    {
-        // When the app terminates we must finish the global span
-        // and send the trace to the jaeger agent.
-        app()->terminating(function () {
-            app('message.context')->finish();
-        });
-
-        // Listen for each logged message and attach it to the global span
-        Event::listen(MessageLogged::class, function (MessageLogged $e) {
-            app('message.context')->log((array)$e);
-        });
-    }
 }

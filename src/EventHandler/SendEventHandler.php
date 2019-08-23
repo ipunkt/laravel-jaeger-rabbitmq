@@ -49,7 +49,7 @@ class SendEventHandler
         /**
          * @var Context $context
          */
-        $context = app('message.context');
+        $context = app('current-context');
 
         $context->inject($traceContent);
 
