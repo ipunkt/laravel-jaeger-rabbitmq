@@ -22,7 +22,9 @@ class Provider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->instance('message.context', new EmptyMessageContext());
+        $this->app->bind('message.context', function($app) {
+            return $app->make('current-context');
+        });
     }
 
     public function boot()
