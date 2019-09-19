@@ -48,7 +48,8 @@ class SendEventHandlerTest extends TestCase {
 		 * @var Context $context
 		 */
 		$context = app(SpanContext::class);
-		$this->app->instance('message.context', $context);
+		$this->app->instance('context', $context);
+        $this->app->instance('current-context', $context);
 
 		$context->setPropagatedTags([
 			'tag1' => 'value1'

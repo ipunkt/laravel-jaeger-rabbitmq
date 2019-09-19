@@ -23,9 +23,9 @@
   "prefer-stable": true,
   "require": {
     "php": "^7.1.3",
-    "ipunkt/laravel-jaeger": "^1.0",
+    "ipunkt/laravel-jaeger": "dev-jaeger-client-php as 1.0.0",
     "ipunkt/laravel-rabbitmq-enqueue": "^1.0",
-    "laravel/framework": "^5",
+    "laravel/framework": "^6",
     "ext-json": "*"
   },
   "extra": {

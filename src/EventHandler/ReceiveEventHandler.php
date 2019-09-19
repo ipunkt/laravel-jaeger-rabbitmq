@@ -2,6 +2,7 @@
 
 use App;
 use Interop\Amqp\AmqpMessage;
+use Ipunkt\LaravelJaeger\Context\MasterSpanContext;
 use Ipunkt\LaravelJaeger\Context\SpanContext;
 use Ipunkt\LaravelJaegerRabbitMQ\Context\EmptyMessageContext;
 use Ipunkt\LaravelJaegerRabbitMQ\Context\MessageParser;
@@ -33,9 +34,10 @@ class ReceiveEventHandler
 	    /**
 	     * @var SpanContext $context
 	     */
-        $context = app(SpanContext::class);
+        $context = app(MasterSpanContext::class);
 
-        app()->instance('message.context', $context);
+        app()->instance('context', $context);
+        app()->instance('current-context', $context);
 
         $context->start();
         $this->parseMessage( $messageReceived->getMessage() );
@@ -46,12 +48,12 @@ class ReceiveEventHandler
         /**
          * @var SpanContext $context
          */
-        $context = app('message.context');
+        $context = app('context');
         $context->log(['result' => $messageProcessed->getResult()]);
         $context->setPrivateTags(['result' => $messageProcessed->getResult()]);
         $context->finish();
 
-        app()->instance('message.context', new EmptyMessageContext());
+        app()->instance('context', new EmptyMessageContext());
     }
 
     public function messageCausedException(MessageCausedException $messageCausedException)
@@ -61,7 +63,7 @@ class ReceiveEventHandler
         /**
          * @var SpanContext $context
          */
-        $context = app('message.context');
+        $context = app('context');
         $context->log([
             'message' => 'Exception thrown',
             'exception-message' => $exception->getMessage(),
@@ -74,14 +76,14 @@ class ReceiveEventHandler
         $context->setPrivateTags(['error' => 'exception']);
         $context->finish();
 
-        app()->instance('message.context', new EmptyMessageContext());
+        app()->instance('context', new EmptyMessageContext());
 
     }
 
 	private function parseMessage( AmqpMessage $message ) {
         $this->messageParser
             ->setMessage($message)
-            ->setContext( app('message.context') )
+            ->setContext( app('context') )
             ->parse();
 	}
 
