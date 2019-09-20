@@ -1,5 +1,6 @@
 <?php namespace Ipunkt\LaravelJaegerRabbitMQ\EventHandler;
 
+use Illuminate\Support\Str;
 use Interop\Amqp\AmqpMessage;
 use Ipunkt\LaravelJaeger\Context\Context;
 use Ipunkt\RabbitMQ\Events\MessageSending;
@@ -38,7 +39,7 @@ class SendEventHandler
      */
     private function addContextToJsonMessage()
     {
-        if( !str_contains($this->message->getContentType(), 'json' ) )
+        if( !Str::contains($this->message->getContentType(), 'json' ) )
             return;
 
         $messageBody = $this->message->getBody();
