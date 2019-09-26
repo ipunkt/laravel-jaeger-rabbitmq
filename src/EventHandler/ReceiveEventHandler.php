@@ -2,9 +2,9 @@
 
 use App;
 use Interop\Amqp\AmqpMessage;
+use Ipunkt\LaravelJaeger\Context\EmptyContext;
 use Ipunkt\LaravelJaeger\Context\MasterSpanContext;
 use Ipunkt\LaravelJaeger\Context\SpanContext;
-use Ipunkt\LaravelJaegerRabbitMQ\Context\EmptyMessageContext;
 use Ipunkt\LaravelJaegerRabbitMQ\Context\MessageParser;
 use Ipunkt\RabbitMQ\Events\MessageCausedException;
 use Ipunkt\RabbitMQ\Events\MessageProcessed;
@@ -53,7 +53,7 @@ class ReceiveEventHandler
         $context->setPrivateTags(['result' => $messageProcessed->getResult()]);
         $context->finish();
 
-        app()->instance('context', new EmptyMessageContext());
+        app()->instance('context', new EmptyContext());
     }
 
     public function messageCausedException(MessageCausedException $messageCausedException)
@@ -76,7 +76,7 @@ class ReceiveEventHandler
         $context->setPrivateTags(['error' => 'exception']);
         $context->finish();
 
-        app()->instance('context', new EmptyMessageContext());
+        app()->instance('context', new EmptyContext());
 
     }
 

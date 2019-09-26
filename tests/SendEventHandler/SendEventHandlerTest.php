@@ -6,10 +6,7 @@ use Ipunkt\LaravelJaeger\Context\SpanContext;
 use Ipunkt\LaravelJaegerRabbitMQ\EventHandler\SendEventHandler;
 use Ipunkt\LaravelJaegerRabbitMQTests\TestCase;
 use Ipunkt\RabbitMQ\Events\MessageSending;
-use Jaeger\Config;
 use Mockery;
-use OpenTracing\Span;
-use OpenTracing\Tracer;
 
 /**
  * Class SendEventHandlerTest
@@ -37,13 +34,11 @@ class SendEventHandlerTest extends TestCase {
 
 		$messageSending = new MessageSending($amqpMessage);
 
-		$mockTracer = Mockery::mock(Tracer::class);
-		$mockTracer->shouldReceive('initTrace');
-		$mockSpan = Mockery::mock(Span::class);
-		$mockConfig = Mockery::mock(Config::class);
+    $mockTracer->shouldReceive('initTrace');
+    $mockSpan = Mockery::mock(Span::class);
+    $mockConfig = Mockery::mock(Config::class);
 		$mockConfig->shouldReceive('initTrace')->andReturn($mockTracer);
 
-		Config::$instance = $mockConfig;
 		/**
 		 * @var Context $context
 		 */
@@ -56,7 +51,6 @@ class SendEventHandlerTest extends TestCase {
 		]);
 
 		$this->sendEventHandler->messageSending($messageSending);
-		dd( $amqpMessage->getBody() );
 	}
 
 }
