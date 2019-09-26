@@ -1,5 +1,6 @@
 <?php namespace Ipunkt\LaravelJaegerRabbitMQ\Context;
 
+use Illuminate\Support\Arr;
 use Interop\Amqp\AmqpMessage;
 use Ipunkt\LaravelJaeger\Context\Context;
 
@@ -36,7 +37,7 @@ class MessageParser
 
         $this->parseContent();
 
-        $this->context->parse( $this->routingKey, array_get($this->content, 'trace', []) );
+        $this->context->parse( $this->routingKey, Arr::get($this->content, 'trace', []) );
 
         $this->logMessageContent();
     }
